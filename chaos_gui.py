@@ -1,21 +1,22 @@
 
 import tkinter as tk
 from tkinter import ttk
+from tkinter import font
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import numpy as np
 import plot_handler as ph
 
-#Github 33333rrrddd changeeee!!!
-#forth 44444rth change!!!!!!!
 
 map_type = None
+
 
 # Function to plot graph
 def update_plot():
 
     #set R-value
     ph.r = float(entry.get())
+    ph.x0 = float(entry_start.get())
 
     #Type of map
     map_type = text_var.get()
@@ -38,8 +39,9 @@ def update_plot():
     ax1.set_ylabel("x(j+1)")
     ax1.legend(loc='upper right')
 
+    nbr_steps = int(entry_nbr_steps.get())
     if map_type == "Logistic map":
-        x, y = ph.logistic_map(200)
+        x, y = ph.logistic_map(nbr_steps)
     else:
         y = np.sin(x)
     ax2.plot(x, y, label=map_type)  # Example plot for second subplot
@@ -47,14 +49,6 @@ def update_plot():
     ax2.set_xlabel("j")
     ax2.set_ylabel("x(j)")
 
-    '''
-    # Plot on the second subplot (for demonstration purposes)
-    ax2.plot(x, np.cos(x), label="Cosine wave")  # Example plot for second subplot
-    ax2.set_title("Second Plot")
-    ax2.set_xlabel("x")
-    ax2.set_ylabel("cos(x)")
-    ax2.legend(loc='upper right')
-    '''
     
     # Redraw the canvas
     canvas.draw()
@@ -76,7 +70,7 @@ frame.pack(padx=10, pady=10)
 
 #fig, ax = plt.subplots(figsize=(5, 4))
 # Create a matplotlib figure with 2 subplots
-fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 4))  # 1 row, 2 columns
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 6))  # 1 row, 2 columns
 
 # Create a Tkinter variable to hold the selected text
 text_var = tk.StringVar(value="Logistic map")
@@ -85,36 +79,83 @@ text_var = tk.StringVar(value="Logistic map")
 canvas = FigureCanvasTkAgg(fig, master=frame)
 canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=True)
 
+font_size = 20
+# Define a larger font
+large_font = font.Font(size=font_size)
+
+# Create a style object
+style = ttk.Style()
+
+# Configure the styles for some widgets
+style.configure('.',
+                font=large_font)  # Apply the font style
+#style.configure('TRadioButton',
+#                font=large_font)
+
+
 # Create a button to update the plot
 button = ttk.Button(frame, text="Show Plot", command=update_plot)
 button.pack(side=tk.BOTTOM)
 
 # Create and pack the radio buttons
-radio_button_a = ttk.Radiobutton(root, text="Logistic map", value="Logistic map", variable=text_var)
+# Create a radio button with arguments on multiple lines
+radio_button_a = ttk.Radiobutton(
+    root,
+    text="Logistic map",
+    value="Logistic map",
+    variable=text_var
+)
 #radio_button_a.pack(anchor=tk.W)
 radio_button_a.pack(anchor=tk.W, padx=10, pady=10, side=tk.LEFT)
 
-radio_button_b = ttk.Radiobutton(root, text="Tent map", value="Tent map", variable=text_var)
+radio_button_b = ttk.Radiobutton(
+    root, text="Tent map",
+    value="Tent map",
+    variable=text_var
+)
 #radio_button_b.pack(anchor=tk.W)
 radio_button_b.pack(anchor=tk.W, padx=10, pady=10, side=tk.LEFT)
 
 # Create a label
-label = tk.Label(root, text="R:")
+label = tk.Label(root, text="R:", font=large_font)
 #label.pack(padx=10, pady=10)
 label.pack(side=tk.LEFT, padx=10, pady=10)
 
 # Create a StringVar with default value
 default_value = tk.StringVar(value="2")
 
-entry = tk.Entry(root, width=5, textvariable=default_value)
-#entry.pack(padx=10, pady=10)
+entry = tk.Entry(root, width=5, textvariable=default_value, font=large_font)
 entry.pack(side=tk.LEFT, padx=10, pady=10)
 
-# Create and pack the activation button
-#activation_button = ttk.Button(root, text="Print Selected Text", command=print_selected_text)
-#activation_button.pack(pady=10)
-#button = ttk.Button(frame, text="set", command=update_plot)
-#button.pack(side=tk.BOTTOM)
+# Create a label
+label = tk.Label(root, text="Initial x:", font=large_font)
+label.pack(side=tk.LEFT, padx=10, pady=10)
+
+# Create a StringVar with default value
+default_value = tk.StringVar(value="0.1")
+
+entry_start = tk.Entry(
+    root,
+    width=6,
+    textvariable=default_value,
+    font=large_font
+)
+entry_start.pack(side=tk.LEFT, padx=10, pady=10)
+
+# Create a label
+label = tk.Label(root, text="Number of steps:", font=large_font)
+label.pack(side=tk.LEFT, padx=10, pady=10)
+
+# Create a StringVar with default value
+default_value = tk.StringVar(value="20")
+
+entry_nbr_steps = tk.Entry(
+    root,
+    width=6,
+    textvariable=default_value,
+    font=large_font
+)
+entry_nbr_steps.pack(side=tk.LEFT, padx=10, pady=10)
 
 # Initialize the plot
 update_plot()
