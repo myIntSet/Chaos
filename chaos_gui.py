@@ -6,11 +6,9 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import numpy as np
 import plot_handler as ph
 
-#Github-change1!!!!!!!!!!!!!!!!!!!!
-#Github - change2!!!!!!!!!!!!!
+#Github 33333rrrddd changeeee!!!
 
 map_type = None
-#Git-specifick-change: here
 
 # Function to plot graph
 def update_plot():
